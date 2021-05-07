@@ -34,7 +34,7 @@ const createCard = async (newCard) => {
         }
     }
     const data = [newCard.cardUUID, newCard.cardBalance, newCard.customerFirstName, newCard.customerLastName];
-    return dbConnection.promise().query("INSERT INTO CARDS(cardUUID,cardBalance,customerFristName,customerLastName) VALUES(?,?,?,?)", data).then((results)=> {
+    return dbConnection.promise().query("INSERT INTO CARDS(cardUUID,cardBalance,customerFirstName,customerLastName) VALUES(?,?,?,?)", data).then((results)=> {
         return {
             success: true,
             message: "Card Registered",
