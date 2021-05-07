@@ -44,6 +44,7 @@
                             <input class="w3-input w3-border" id="lastname" type="text">
                             <br>
                             <button class="w3-btn w3-blue">Register</button>
+                            <p id="err_indictor" style="text-align: center;"></p>
                         </form>
                 </div>
             </div>
@@ -97,22 +98,32 @@
 <script>
     const socket = io("http://localhost:3000");
     function sendForm(){
-        let uuid = document.getElementById("uuid").value
-        let fname = document.getElementById("fname").value
-        let lname = document.getElementById("lastname").value
+        let uuid = document.getElementById("uuid")
+        let fname = document.getElementById("fname")
+        let lname = document.getElementById("lastname")
+        let indicatorP = document.getElementById("err_indictor")
+        indicatorP.innerHTML = "";
+        indicatorP.style.color = "black"
         axios.post("http://localhost:3000/api/cards/new-card", {
-            "cardUUID": uuid,
+            "cardUUID": uuid.value,
             "cardBalance": 0,
-            "customerFirstName": fname,
-            "customerLastName": lname
+            "customerFirstName": fname.value,
+            "customerLastName": lname.value
         }).then(res=> {
             if(res.data.success){
-                console.log("created")
+                uuid.value = ""
+                fname.value = ""
+                lname.value = ""
+                indicatorP.innerHTML = "CARD REGISTERED SUCCESSFULLY!";
+                indicatorP.style.color = "green"
             }else{
-                console.log(res.data.message)
+                indicatorP.innerHTML = res.data.message;
+                indicatorP.style.color = "red"
             }
         }).catch(err=> {
             console.log(err)
+            indicatorP.innerHTML = "SOMETHING WENT WRONG!";
+            indicatorP.style.color = "red"
         })
         return false;
     }
