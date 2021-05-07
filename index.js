@@ -23,7 +23,10 @@ app.use("/api/cards", cardsRouter)
 app.use("/api/transactions", transactionsRouter)
 
 app.get("/", (req,res)=> {
-    EJS.renderFile("./templates/home.ejs", {}, {}, function(err, str){ // (fileName, data, opt, callback)
+    let data = {
+        current_page: "HOME"
+    }
+    EJS.renderFile("./templates/home.ejs", data, {}, function(err, str){ // (fileName, data, opt, callback)
         if(err) {
             return res.send(`<center><br/><br/><br/><h1>ERROR OCCURED: ${err.message}</h1></center>`)
         }
@@ -41,6 +44,10 @@ app.get("/view-card/:uuid", (req,res)=> {
 
 app.get("/all-transactions", (req,res)=> {
     return res.send("This is the view all transactions page")
+})
+
+app.get("/register-card", (req,res)=>{
+    return res.send("This is the card register page")
 })
 
 io.on("connection", (clientSocket)=> {
