@@ -17,7 +17,7 @@ async function getHomeStats(){
                 return {
                     success: true,
                     message: "GOT STATS",
-                    stats: stats
+                    ...stats
                 }
             })
         })

@@ -4,15 +4,17 @@ const cors = require("cors")
 const socketIo = require("socket.io")
 const cardsRouter = require('./routes/cards.route')
 const transactionsRouter = require('./routes/transactions.route')
+const { getHomeStats } = require("./controllers/index.controller")
 const EJS = require("ejs")
+var moment = require('moment');
 require("./database/index")
 
 var server = require("http").Server(app)
 const io = socketIo(server)
 
 app.use(cors({}));
-app.use(body_parser.urlencoded({extended: true}));
-app.use(body_parser.json());
+app.use(require("express").urlencoded({extended: true}));
+app.use(require("express").json());
 
 app.set("IO", io);
 app.set('view engine', 'ejs');
@@ -22,10 +24,12 @@ app.use('/static', require("express").static('static'))
 app.use("/api/cards", cardsRouter)
 app.use("/api/transactions", transactionsRouter)
 
-app.get("/", (req,res)=> {
-    let data = {
-        current_page: "HOME"
+app.get("/", async(req,res)=> {
+    let stats = await getHomeStats()
+    if(!stats.success){
+        return res.send(`<center><br/><br/><br/><h1>ERROR OCCURED: ${stats.message}</h1></center>`)
     }
+    let data = { current_page: "HOME", stats: stats, moment: moment }
     EJS.renderFile("./templates/home.ejs", data, {}, function(err, str){ // (fileName, data, opt, callback)
         if(err) {
             return res.send(`<center><br/><br/><br/><h1>ERROR OCCURED: ${err.message}</h1></center>`)
