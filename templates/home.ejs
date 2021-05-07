@@ -58,7 +58,7 @@
                 <div class="w3-container">
                     <h3 style="text-align: center;">Latest Transactions</h3>
                     <br>
-                    <table class="w3-table w3-striped w3-white">
+                    <table class="w3-table w3-striped w3-white" id="transactions_table">
                         <thead class="w3-blue">
                             <th>ID</th>
                             <th>Card UUID</th>
@@ -84,6 +84,22 @@
 
         <!-- End page content -->
     </div>
+
+    <div id="id01" class="w3-modal">
+        <div class="w3-modal-content">
+          <header class="w3-container"> 
+            <span onclick="document.getElementById('id01').style.display='none'" 
+            class="w3-button w3-display-topright w3-large w3-text-red"><b>&times;</b></span>
+            <h3 class="w3-text-green">New Transaction</h3>
+          </header>
+          <div class="w3-container">
+            <br>
+            <table class="w3-table w3-striped w3-white" id="transactions_table_new">
+            </table>
+            <br>
+          </div>
+        </div>
+      </div>
 
     <script>
         // Get the Sidebar
@@ -119,6 +135,34 @@
             }
         }
     </script>
+
+<script src="/static/js/socket.io.js"></script>
+<script>
+    let main_table = document.getElementById("transactions_table")
+    let modal_table = document.getElementById("transactions_table_new")
+    const socket = io("http://localhost:3000");
+    socket.on("NEW_TRANSACTION", (data)=> {
+        let tr = document.createElement("tr")
+        let th = document.createElement("thead")
+        tr.innerHTML = `<td>${data.transaction.transactionId}</td><td>${data.transaction.cardUUID}</td><td>${data.transaction.initialBalance}</td><td>${data.transaction.transportFare}</td><td>${data.transaction.newBalance}</td><td>${data.transaction.transactionDate}</td>`;
+        main_table.prepend(tr)
+        let tr2 = document.createElement("tr");
+        tr2.innerHTML = `<td>${data.transaction.transactionId}</td><td>${data.transaction.cardUUID}</td><td>${data.transaction.initialBalance}</td><td>${data.transaction.transportFare}</td><td>${data.transaction.newBalance}</td><td>${data.transaction.transactionDate}</td>`;
+        modal_table.innerHTML = `
+                <thead class="w3-blue">
+                    <th>ID</th>
+                    <th>Card UUID</th>
+                    <th>Initial Balance</th>
+                    <th>Transaport Fare</th>
+                    <th>New Balance</th>
+                    <th>Date</th>
+                </thead>
+        `
+        modal_table.append(tr2)
+
+        document.getElementById('id01').style.display='block'
+    })
+</script>
 
 </body>
 
