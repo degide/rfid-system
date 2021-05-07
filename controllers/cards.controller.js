@@ -52,10 +52,6 @@ const createCard = async (newCard) => {
     })
 }
 
-const getCardById = (cardId) => {
-
-}
-
 const getCardByUUID = (cardUUID) => {
     return dbConnection.promise().query("SELECT * FROM CARDS WHERE cardUUID=?", cardUUID).then((results)=> {
         return {
@@ -109,7 +105,7 @@ const cardTopUp = async(cardUUID, amount) => {
     if(cardDetails.rows.length < 1){
         return {
             success: false,
-            message: "CARD NOT FOUND"
+            message: "CARD NOT REGISTERED"
         }
     }
 
@@ -149,7 +145,7 @@ const deleteCardByUUID = async (cardUUID) => {
     if(cardDetails.rows.length < 1){
         return {
             success: false,
-            message: "CARD NOT FOUND"
+            message: "CARD NOT REGISTERED"
         }
     }
     return dbConnection.promise().query("DELETE FROM CARDS WHERE cardUUID=?", cardUUID).then(async(results)=> {
@@ -176,7 +172,6 @@ const deleteCardByUUID = async (cardUUID) => {
 
 module.exports = {
     createCard,
-    getCardById,
     getCardByUUID,
     getAllCards,
     deleteCardByUUID,
