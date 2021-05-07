@@ -8,7 +8,7 @@ const mysql = require("mysql2")
 
 const dbConnection = mysql.createConnection({
     host: "127.0.0.1",
-    user: "egide",
+    user: "root",
     password: "",
     database: "rfid_system"
 })
