@@ -14,14 +14,25 @@ app.use(body_parser.urlencoded({extended: true}));
 app.use(body_parser.json());
 
 app.set("IO", io);
+app.set('view engine', 'ejs');
 
-app.use("/cards", cardsRouter)
-app.use("/transactions", transactionsRouter)
+app.use("/api/cards", cardsRouter)
+app.use("/api/transactions", transactionsRouter)
 
 app.get("/", (req,res)=> {
-    return res.send({
-        message: "server is working"
-    })
+    return res.send("This is the landing page")
+})
+
+app.get("/all-cards", (req,res)=> {
+    return res.send("This is the view all cards page")
+})
+
+app.get("/view-card/:uuid", (req,res)=> {
+    return res.send("This is the view single card page")
+})
+
+app.get("/all-transactions", (req,res)=> {
+    return res.send("This is the view all transactions page")
 })
 
 io.on("connection", (clientSocket)=> {
