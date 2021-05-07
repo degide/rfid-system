@@ -41,9 +41,13 @@
                             <th>Transaport Fare</th>
                             <th>New Balance</th>
                             <th>Date</th>
+                            <th>Action</th>
                         </thead>
                         <% transactions.rows.forEach(transaction=> { %>
-                            <%-"<tr><td>"+transaction.transactionId+"</td><td>"+transaction.cardUUID+"</td><td>"+transaction.initialBalance+"</td><td>"+transaction.transportFare+"</td><td>"+transaction.newBalance+"</td><td>"+ moment(transaction.transactionDate).format( 'MMM DD YYYY HH:MM:SS a')+"</td></tr>" %> 
+                            <%-"<tr><td>"+transaction.transactionId+"</td><td>"+transaction.cardUUID+"</td><td>"+transaction.initialBalance+"</td><td>"+transaction.transportFare+"</td><td>"+transaction.newBalance+"</td><td>"+ moment(transaction.transactionDate).format( 'MMM DD YYYY HH:MM:SS a')+"</td><td>"+`
+                                <button class="w3-button w3-red" style="border-radius: 5px;">Delete</button> &emsp;
+                                <button class="w3-button w3-green" style="border-radius: 5px;">Update</button>
+                            `+"</td></tr>" %> 
                         <% }); %>
                     </table>
                 </div>
@@ -113,11 +117,14 @@
 <script>
     let main_table = document.getElementById("transactions_table")
     let modal_table = document.getElementById("transactions_table_new")
-    const socket = io("http://localhost:3000");
+    const socket = io();
     socket.on("NEW_TRANSACTION", (data)=> {
         let tr = document.createElement("tr")
         let th = document.createElement("thead")
-        tr.innerHTML = `<td>${data.transaction.transactionId}</td><td>${data.transaction.cardUUID}</td><td>${data.transaction.initialBalance}</td><td>${data.transaction.transportFare}</td><td>${data.transaction.newBalance}</td><td>${data.transaction.transactionDate}</td>`;
+        tr.innerHTML = `<td>${data.transaction.transactionId}</td><td>${data.transaction.cardUUID}</td><td>${data.transaction.initialBalance}</td><td>${data.transaction.transportFare}</td><td>${data.transaction.newBalance}</td><td>${data.transaction.transactionDate}</td><td>
+                        <button class="w3-button w3-red" style="border-radius: 5px;">Delete</button> &emsp;
+                        <button class="w3-button w3-green" style="border-radius: 5px;">Update</button>
+                    </td>`;
         main_table.append(tr)
         let tr2 = document.createElement("tr");
         tr2.innerHTML = `<td>${data.transaction.transactionId}</td><td>${data.transaction.cardUUID}</td><td>${data.transaction.initialBalance}</td><td>${data.transaction.transportFare}</td><td>${data.transaction.newBalance}</td><td>${data.transaction.transactionDate}</td>`;

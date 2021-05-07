@@ -40,9 +40,13 @@
                             <th>Card Balance</th>
                             <th>Customer First Name</th>
                             <th>Customer Last Name</th>
+                            <th>Action</th>
                         </thead>
                         <% allCards.rows.forEach(card=> { %>
-                            <%-"<tr><td>"+card.cardId+"</td><td>"+card.cardUUID+"</td><td>"+card.cardBalance+"</td><td>"+card.customerFirstName+"</td><td>"+card.customerLastName+"</td></tr>" %> 
+                            <%-"<tr><td>"+card.cardId+"</td><td>"+card.cardUUID+"</td><td>"+card.cardBalance+"</td><td>"+card.customerFirstName+"</td><td>"+card.customerLastName+"</td><td>"+`
+                                <button class="w3-button w3-red" style="border-radius: 5px;">Delete</button> &emsp;
+                                <button class="w3-button w3-green" style="border-radius: 5px;">Update</button>
+                            `+"</td></tr>" %> 
                         <% }); %>
                     </table>
                 </div>
@@ -111,7 +115,7 @@
 <script src="/static/js/socket.io.js"></script>
 <script>
     let modal_table = document.getElementById("transactions_table_new")
-    const socket = io("http://localhost:3000");
+    const socket = io();
     socket.on("NEW_TRANSACTION", (data)=> {
         let tr2 = document.createElement("tr");
         tr2.innerHTML = `<td>${data.transaction.transactionId}</td><td>${data.transaction.cardUUID}</td><td>${data.transaction.initialBalance}</td><td>${data.transaction.transportFare}</td><td>${data.transaction.newBalance}</td><td>${data.transaction.transactionDate}</td>`;

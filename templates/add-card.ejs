@@ -96,7 +96,7 @@
 <script src="/static/js/socket.io.js"></script>
 <script src="/static/js/axios.min.js"></script>
 <script>
-    const socket = io("http://localhost:3000");
+    const socket = io();
     function sendForm(){
         let uuid = document.getElementById("uuid")
         let fname = document.getElementById("fname")
@@ -104,7 +104,7 @@
         let indicatorP = document.getElementById("err_indictor")
         indicatorP.innerHTML = "";
         indicatorP.style.color = "black"
-        axios.post("http://localhost:3000/api/cards/new-card", {
+        axios.post("/api/cards/new-card", {
             "cardUUID": uuid.value,
             "cardBalance": 0,
             "customerFirstName": fname.value,
