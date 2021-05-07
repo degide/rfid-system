@@ -7,6 +7,7 @@ const { getHomeStats } = require("./controllers/index.controller")
 const EJS = require("ejs")
 var moment = require('moment');
 const { getAllTransactions } = require("./controllers/transactions.controller")
+const { getAllCards } = require("./controllers/cards.controller")
 require("./database/index")
 
 var server = require("http").createServer(app)
@@ -41,8 +42,21 @@ app.get("/", async(req,res)=> {
     });
 })
 
-app.get("/all-cards", (req,res)=> {
-    return res.send("This is the view all cards page")
+app.get("/all-cards", async(req,res)=> {
+    let allCards = await getAllCards()
+    if(!allCards.success){
+        res.header("Content-Type", "text/html")
+        return res.send(Buffer.from(`<center><br/><br/><br/><h1>ERROR OCCURED: ${allCards.message}</h1></center>`))
+    }
+    let data = { current_page: "HOME", allCards: allCards, moment: moment }
+    EJS.renderFile("./templates/view-all-cards.ejs", data, {}, function(err, str){ // (fileName, data, opt, callback)
+        if(err) {
+            res.header("Content-Type", "text/html")
+            return res.send(Buffer.from(`<center><br/><br/><br/><h1>ERROR OCCURED: ${err.message}</h1></center>`))
+        }
+        res.header("Content-Type", "text/html")
+        return res.send(Buffer.from(str))
+    });
 })
 
 app.get("/view-card/:uuid", (req,res)=> {
