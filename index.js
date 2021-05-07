@@ -4,6 +4,7 @@ const cors = require("cors")
 const socketIo = require("socket.io")
 const cardsRouter = require('./routes/cards.route')
 const transactionsRouter = require('./routes/transactions.route')
+const EJS = require("ejs")
 require("./database/index")
 
 var server = require("http").Server(app)
@@ -16,11 +17,18 @@ app.use(body_parser.json());
 app.set("IO", io);
 app.set('view engine', 'ejs');
 
+app.use('/static', require("express").static('static'))
+
 app.use("/api/cards", cardsRouter)
 app.use("/api/transactions", transactionsRouter)
 
 app.get("/", (req,res)=> {
-    return res.send("This is the landing page")
+    EJS.renderFile("./templates/home.ejs", {}, {}, function(err, str){ // (fileName, data, opt, callback)
+        if(err) {
+            return res.send(`<center><br/><br/><br/><h1>ERROR OCCURED: ${err.message}</h1></center>`)
+        }
+        return res.send(str)
+    });
 })
 
 app.get("/all-cards", (req,res)=> {
